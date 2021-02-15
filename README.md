@@ -1,18 +1,29 @@
 # Slides
 
-En aquest repositori recollirem slides i presentacions fetes en públic que vinguin en markdown renderitzat.
+This repo contains slides from public talks.
+So far, we mostly use [Marp](https://marp.app) for building slide decks.
 
-## Marp
+Marp renders markdown code into HTML or PDF.
 
-[Marp](https://marp.app/) és un framework en javascript que renderitza presentacions en markdown a HTML o PDF.
-Pot incloure LaTeX.
-L'extensió per a VS Code és autocontinguda i un bon punt d'entrada.
+## Working on VS Code
 
-## Pandoc
+One only needs to install the relevant [extension](https://github.com/marp-team/marp-vscode), which works out of the box.
 
-[Pandoc](https://pandoc.org/) és el convertidor universal de documents per excel·lència.
+## CLI
 
+I have supplied a setup in a `docker-compose.yaml`.
+By default, it serves the root folder as a service on `localhost:8080`. 
+
+In order to start the service:
+```bash
+docker-compose up -d
+```
 
 # Deployment instructions
 
-TBD
+This repository is cloned as a submodule in ber2.github.io.
+In order to publish some slides:
+
+- Push changes to the `main` branch in this repo.
+- Pull changes in the `ber2.github.io/slides` repo submodule.
+
