@@ -6,7 +6,18 @@ En aquest repositori recollirem slides i presentacions fetes en públic que ving
 
 [Marp](https://marp.app/) és un framework en javascript que renderitza presentacions en markdown a HTML o PDF.
 Pot incloure LaTeX.
-L'extensió per a VS Code és autocontinguda i un bon punt d'entrada.
+
+### Maneres de treballar-hi
+
+* VS Code: té una extensió que facilita molt la vida, ja que mostra el preview i permet exportar
+
+* CLI: cal construir la imatge indicada al `docker-compose.yaml`. Per defecte serveix el directori arrel, però es pot modificar el command per a exportar un deckset a HTML.
+
+Amb l'execució de:
+```bash
+docker-compose up -d
+```
+se serveix marp amb aquest directori arrel a `localhost:8080`.
 
 ## Pandoc
 
@@ -15,4 +26,4 @@ L'extensió per a VS Code és autocontinguda i un bon punt d'entrada.
 
 # Deployment instructions
 
-TBD
+Cal copiar el fitxer exportat a un repositori github pages públic
