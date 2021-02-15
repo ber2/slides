@@ -3,8 +3,9 @@ theme: default
 class:
   - lead
   - invert
+# paginate: true
 # backgroundColor: #fff
-#backgroundImage: url('https://marp.app/assets/hero-background.jpg')
+# backgroundImage: url('https://marp.app/assets/hero-background.jpg')
 marp: true
 # header: Hello
 footer: Alberto Cámara - INS Gabriela Mistral - 16 de febrer de 2021
