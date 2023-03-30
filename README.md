@@ -7,19 +7,29 @@ Marp renders markdown code into HTML or PDF.
 
 ## Working on VS Code
 
-One only needs to install the relevant [extension](https://github.com/marp-team/marp-vscode), which works out of the box.
+One only needs to install the relevant
+[extension](https://github.com/marp-team/marp-vscode), which works out of the
+box.
 
 ## CLI
 
 I have supplied a setup in a `docker-compose.yaml`.
-By default, it serves the root folder as a service on `localhost:8080`. 
+By default, it serves the root folder as a service on `localhost:8080`.
 
 In order to start the service:
+
 ```bash
 docker-compose up -d
 ```
 
-# Deployment instructions
+Perhaps the fastest way to build the slide deck into static HTML is to invoke
+the CLI tool with `npx`:
+
+```bash
+npx @marp-team/marp-cli@latest slides.md
+```
+
+## Deployment instructions
 
 This repository is cloned as a submodule in ber2.github.io.
 In order to publish some slides:
