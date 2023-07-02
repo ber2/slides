@@ -19,7 +19,7 @@ By default, it serves the root folder as a service on `localhost:8080`.
 In order to start the service:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 Perhaps the fastest way to build the slide deck into static HTML is to invoke
