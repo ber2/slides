@@ -59,15 +59,19 @@ web: **[ber2.github.io](https://ber2.github.io/)**
 
 ---
 
+![bg left:45%](img/traffic.jpg)
+
 - We process ~100B monthly events at **Hybrid Theory** from different sources, related to web traffic.
 - Reconstructing a user's browsing history involves **slow & expensive** joins of very large tables.
 - Most _interesting_ business questions involve **slow aggregation queries** on top of such joins.
 
 ---
 
+![bg right:35%](img/audience.jpg)
+
 ## An example: building an interest audience 
 
-A web traffic event, after enrichment & uniformization, has at least the following dimensions:
+A web traffic event can have the following dimensions:
 
 ```
 (timestamp, user id, country, device type, url tokens)
@@ -75,9 +79,11 @@ A web traffic event, after enrichment & uniformization, has at least the followi
 
 **Definition**: a _segment_ is the set of users having expressed a common trait in their browsing behaviour.
 
-**Example of a segment**: the list of user ids in GB that have browsed any website containing the keyword `laptop`.
+**Example of a segment**: the list of user ids that have browsed any website containing the keyword `laptop`.
 
 ---
+
+![bg right:35%](img/audience.jpg)
 
 We routinely build segments as in the example, and refresh them every 3h.
 We make them available for internal use in our own campaigns, and externally by selling them in several marketplaces.
@@ -88,13 +94,18 @@ We make them available for internal use in our own campaigns, and externally by 
 
 ---
 
+![bg left:45% w:500](img/sampling.jpg)
+
 ## What to do
 
 * **Sampling**: only take into consideration a small subset of the data.
 
 * **Praggregate**: precompute and store aggregations on most common dimensions of the data, then compute further aggregations as needed.
 
+
 ---
+
+![bg right:45% w:500](img/estimation.jpg)
 
 There are two types of KPIs appearing in these aggregations, regardless of whether we sample or preaggregate:
 
@@ -102,11 +113,14 @@ There are two types of KPIs appearing in these aggregations, regardless of wheth
 
 * **Non-additive (hard)**: counting distinct values, most frequent value...
 
+
 ---
 
 ## Preaggregations
 
-Pass through the data on a daily basis and save aggregations across common access patterns.
+For audience size estimation, sampling produces very large errors.
+
+**Preaggregation idea**: pass through the data on a daily basis and save aggregations across common access patterns.
 
 * For additive KPIs, store enough information to re-aggregate later.
 
@@ -116,21 +130,24 @@ Pass through the data on a daily basis and save aggregations across common acces
 
 ## What is a sketch?
 
-Given a set $X$, a _sketch_ of $X$ is a set $S$...  of values A sketch is a summary of the elements in a set which
+![bg left:35%](img/sketch.jpg)
+
+Given a set $X$, a _sketch_ of $X$ is a set $S$ containing a _summary of numerical data_ calculated from values of $X$, such that:
 
 - Given a new value $x$, we can compute a sketch for $X \cup \left\{ x \right\}$ from $S$.
 - Given two sets $X$ and $Y$ with sketches $S$ and $T$, we can compute a sketch for $X \cup Y$ from $S$ and $T$.
+- It is possible to recover statistical information about $X$ by looking only at $S$, with a bounded error.
 
 ---
+
+![bg left:35%](img/sketch.jpg)
 
 In practice:
 - $S$ is much smaller than $X$.
 - $S$ can be computed in a single passing through $X$ and stored in constant memory. 
-- It is possible to recover statistical information from $X$ by looking only at $S$, with a bounded error.
-- Most often, $S$ is obtained by retaining information related to hashes of the elements in $X$.
+- $S$ is obtained by retaining information related to hashes of the elements in $X$.
 
 ---
-
 
 ```scala
 trait CountingSketcher[S] {
@@ -150,6 +167,19 @@ In order to build a sketching algorithm for counts:
 
 ---
 
+### Audience size estimation via sketches
+
+* **Daily aggregation**: take web browsing events, aggregate and store them.
+  * From: `(timestamp, user id, country, device type, url tokens)`
+  * To: `(date, country, url tokens, sketch of user ids)`
+
+* **Further, on-demand aggregation**: given a keyword such as `laptop`,
+  * Filter on `url tokens`
+  * Re-aggregate surviving sketches into a single sketch
+  * Obtain estimate from sketch
+
+---
+
 ## A few fantastic algorithms...
 
 * Flajolet, Martin et al (1985). **HyperLogLog / HyperLogLog++**. Uniques count.
@@ -160,7 +190,7 @@ In order to build a sketching algorithm for counts:
 
 ## ...and where to find them
 
-* HyperLogLog++ powers `approx_count_distinct()` methods in many SQL-like databases: Postgres, Apache Spark,...
+* HyperLogLog++ powers `approx_count_distinct()` methods in many databases: Postgres, Apache Spark, Redis...
 * **Apache Datasketches** project: Java & C++ implementations of many algorithms, with Python bindings.
 * **Datasketch**: Python implementations of HyperLogLog & MinHash
 * **spark-sketches** (WIP): compatible implementations of MinHash & Theta in Scala & Python with Spark UDFs.
@@ -199,6 +229,7 @@ class Sketcher extends CountingSketch[Theta] {
   }
 
   def getEstimate(a: Theta): Double = a.hashes.size.toDouble / a.theta
+}
 ```
 
 ---
@@ -234,12 +265,12 @@ import org.apache.spark.sql.expressions.Aggregator
 val sk = new Sketcher
 
 object SketchPreaggregator
-      extends Aggregator[String, Theta, Array[Byte]] {
-    def zero: Theta = sk.emptySketch
-    def reduce(b: Theta, a: String): Theta = sk.update(b, a)
-    def merge(b1: Theta, b2: Theta): Theta = sk.union(b1, b2)
-    def finish(reduction: Theta): Array[Byte] = sk.serialize(reduction)
-  }
+    extends Aggregator[String, Theta, Array[Byte]] {
+  def zero: Theta = sk.emptySketch
+  def reduce(b: Theta, a: String): Theta = sk.update(b, a)
+  def merge(b1: Theta, b2: Theta): Theta = sk.union(b1, b2)
+  def finish(reduction: Theta): Array[Byte] = sk.serialize(reduction)
+}
 
 ```
 
@@ -249,12 +280,12 @@ Next, we can further aggregate a column of sketches via:
 
 ```scala
 object SketchAggregator
-      extends Aggregator[Array[Byte], Theta, Array[Byte]] {
-    def zero: Theta = sk.emptySketch
-    def reduce(b: Theta, a: Array[Byte]): Theta = sk.union(b, sk.deserialize(a))
-    def merge(b1: Theta, b2: Theta): Theta = sk.union(b1, b2)
-    def finish(reduction: Theta): Array[Byte] = sk.serialize(reduction)
-  }
+    extends Aggregator[Array[Byte], Theta, Array[Byte]] {
+  def zero: Theta = sk.emptySketch
+  def reduce(b: Theta, a: Array[Byte]): Theta = sk.union(b, sk.deserialize(a))
+  def merge(b1: Theta, b2: Theta): Theta = sk.union(b1, b2)
+  def finish(reduction: Theta): Array[Byte] = sk.serialize(reduction)
+}
 ```
 
 ---
@@ -275,29 +306,29 @@ val getEstimate = udf(sk.getEstimate(sk.deserialize(_)))
 
 ---
 
-## Reporting segment overlaps
-
-The goal is to report the number of users in common for each pair of segments defined on our Platform, on a daily basis.
-
-* **April, 2020**. Initial development using SQL joins on our AWS Redshift warehouse.
-* **March, 2021**. Introduce a sampling approach with large errors, discard computing small intersections. Computation becomes _manageable_.
-* **November, 2022**. Move to Apache Spark, use minhash sketches to compute intersections. Accurate estimates, faster computation.
-
----
-
-## Real-time Audience size estimation
-
-Given the definition of an audience as a list of keywords, estimate the number of users.
+## Turning audience size estimation around
 
 * **Previous approach**:
   * Create the audience, add it to segment building jobs
   * Push user ids to campaigns
   * Obtain audience size as a reporting by-product
 
-* **Under development**: 
+* **Current development**: 
   * Give audience definition
   * Obtain real-time size estimations
   * Iterate or start building segment
+
+---
+
+![bg right:30% w:400](img/venn.png)
+
+## Reporting segment overlaps
+
+The goal is to report the number of users in common for each pair of segments defined on our Platform, on a daily basis.
+
+* **April, 2020**. Initial development using SQL joins on our **AWS Redshift** warehouse.
+* **March, 2021**. Introduce a **sampling** approach with large errors, discard computing small intersections. Computation becomes _manageable_.
+* **November, 2022**. Move to **Apache Spark**, use **minhash sketches** to compute intersections. Accurate estimates, faster computation.
 
 ---
 
