@@ -104,7 +104,7 @@ We make them available for internal use in our own campaigns, and externally by 
 
 * **Sampling**: only take into consideration a small subset of the data.
 
-* **Praggregate**: precompute and store aggregations on most common dimensions of the data, then compute further aggregations as needed.
+* **Preaggregate**: precompute and store aggregations on most common dimensions of the data, then compute further aggregations as needed.
 
 
 ---
