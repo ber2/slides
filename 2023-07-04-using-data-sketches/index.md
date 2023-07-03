@@ -19,7 +19,7 @@ footer: Alberto Cámara - Using Data Sketches - 2023-07-04
 
 # **Alberto Cámara**
 
-![bg right:35% w:300](https://ber2.github.io/images/pingu.jpg)
+![bg right:30% w:300](https://ber2.github.io/images/pingu.jpg)
 
 github: **[@ber2](github.com/ber2)**
 
@@ -27,7 +27,7 @@ web: **[ber2.github.io](https://ber2.github.io/)**
 
 - **Maths PhD**
 
-- Mostly doing **Data Science**
+- Doing **Data things** in general, mostly **Science**
 
 - Code mostly in **Python** & **Scala**
 
@@ -41,17 +41,20 @@ web: **[ber2.github.io](https://ber2.github.io/)**
 
 - I lead a Data Science team at [Hybrid Theory](https://hybridtheory.com/), now part of [Azerion Group](https://www.azerion.com/)
 
-- **Global AdTech** agency. We process ~100B monthly events
+- **Online games** and **Online Advertising**
 
-- Remote Engineering team based mostly around Barcelona
+- Several remote engineering teams in Europe, my team is mostly around Barcelona
 
 ---
 
-## PyBCN Community
+## Python Barcelona Community
 
 ![bg right:45% w:400](img/pybcn_logo.png)
 
-- [PyBcn](https://pybcn.org/) member (join us!)
+Dedicated to fostering the Python Community in Barcelona
+- [PyBcn.org](https://pybcn.org/) member (join us!)
+- Organiser of monthly Meetups (propose a talk / venue)
+- Frequent **PyDay** events organised
 
 ---
 
@@ -79,13 +82,14 @@ A web traffic event can have the following dimensions:
 
 **Definition**: a _segment_ is the set of users having expressed a common trait in their browsing behaviour.
 
-**Example of a segment**: the list of user ids that have browsed any website containing the keyword `laptop`.
+**Example**: the list of user ids that have browsed any website containing the keyword `laptop`.
 
 ---
 
 ![bg right:35%](img/audience.jpg)
 
-We routinely build segments as in the example, and refresh them every 3h.
+We routinely build segments and refresh them every 3h.
+
 We make them available for internal use in our own campaigns, and externally by selling them in several marketplaces.
 
 * **Problem**: count the number of users in a segment without actually building it.
@@ -160,7 +164,7 @@ trait CountingSketcher[S] {
 }
 ```
 
-In order to build a sketching algorithm for counts:
+In order to build a sketching algorithm for unique counts:
 - Extend this trait
 - Test quality of estimates
 - Test internal consistency of methods
@@ -300,6 +304,19 @@ val aggSketches = udaf(SketchAggregator)
 val getEstimate = udf(sk.getEstimate(sk.deserialize(_)))
 ```
 
+```scala
+val urlSketches = events
+  .groupBy(to_date($"ts") as "dt", $"country", $"url_tokens")
+  .agg(stringsToSketch($"user_id") as "sketch")
+```
+
+```scala
+val estimates = urlSketches
+  .filter($"url_tokens" like "%laptop%")
+  .agg(aggSketches($"sketch") as "sketch")
+  .withColumn("unique_users", getEstimate($"sketch"))
+```
+
 ---
 
 # What is this good for?
@@ -320,7 +337,15 @@ val getEstimate = udf(sk.getEstimate(sk.deserialize(_)))
 
 ---
 
-![bg right:30% w:400](img/venn.png)
+# Demo time!
+
+---
+
+![bg w:780](img/demo.png)
+
+---
+
+![bg right:30% w:300](img/venn.png)
 
 ## Reporting segment overlaps
 
