@@ -1,0 +1,232 @@
+/*
+ * @theme gruvbox
+ * @author Alberto Cámara
+ * @description Self-contained gruvbox-dark theme for Marp (case study deck)
+ * @size 16:9 1280px 720px
+ */
+
+/* ===== GRUVBOX DARK PALETTE ===== */
+:root {
+  --gb-bg0-h: #1d2021;
+  --gb-bg0: #282828;
+  --gb-bg1: #3c3836;
+  --gb-bg2: #504945;
+  --gb-fg: #ebdbb2;
+  --gb-fg4: #a89984;
+  --gb-gray: #928374;
+  --gb-red: #fb4934;
+  --gb-green: #b8bb26;
+  --gb-yellow: #fabd2f;
+  --gb-blue: #83a598;
+  --gb-purple: #d3869b;
+  --gb-aqua: #8ec07c;
+  --gb-orange: #fe8019;
+}
+
+/* ===== GLOBAL ===== */
+section {
+  background-color: var(--gb-bg0);
+  color: var(--gb-fg);
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 29px;
+  padding: 70px 60px 55px 60px;
+  text-align: left;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+}
+
+h1 {
+  color: var(--gb-yellow);
+  font-size: 2.0em;
+  margin-bottom: 0.4em;
+  border-bottom: 3px solid var(--gb-orange);
+  padding-bottom: 0.25em;
+}
+
+h2 {
+  color: var(--gb-aqua);
+  font-size: 1.4em;
+  margin-top: 0.7em;
+  margin-bottom: 0.45em;
+}
+
+h3 {
+  color: var(--gb-blue);
+  font-size: 1.15em;
+  margin-top: 0.5em;
+  margin-bottom: 0.35em;
+}
+
+p { margin: 0.6em 0; line-height: 1.45; }
+
+strong, b { color: var(--gb-orange); font-weight: 700; }
+em, i { color: var(--gb-yellow); font-style: italic; }
+
+/* ===== LISTS ===== */
+ul, ol { margin: 0.7em 0; padding-left: 1.2em; }
+li { margin: 0.4em 0; line-height: 1.45; }
+li::marker { color: var(--gb-orange); }
+ul ul, ol ul, ul ol, ol ol { margin: 0.25em 0; }
+
+/* ===== CODE ===== */
+pre {
+  background-color: var(--gb-bg0-h);
+  border-left: 4px solid var(--gb-orange);
+  border-radius: 4px;
+  padding: 1em;
+  margin: 0.7em 0;
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+code {
+  font-family: 'Fira Code', 'Monaco', 'Courier New', monospace;
+  font-size: 0.85em;
+}
+
+pre code { background: none; padding: 0; color: var(--gb-fg); }
+
+:not(pre) > code {
+  background-color: var(--gb-bg1);
+  color: var(--gb-yellow);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* ===== SYNTAX HIGHLIGHTING (gruvbox-flavoured) ===== */
+pre code.hljs { padding: 0; background: transparent; }
+.hljs-comment, .hljs-quote { color: var(--gb-gray); font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-subst { color: var(--gb-red); font-weight: bold; }
+.hljs-number, .hljs-literal, .hljs-variable, .hljs-template-variable { color: var(--gb-purple); }
+.hljs-string, .hljs-doctag { color: var(--gb-green); }
+.hljs-title, .hljs-section, .hljs-selector-id { color: var(--gb-yellow); font-weight: bold; }
+.hljs-type, .hljs-class .hljs-title { color: var(--gb-yellow); }
+.hljs-tag, .hljs-name, .hljs-attribute { color: var(--gb-aqua); }
+.hljs-built_in, .hljs-builtin-name { color: var(--gb-blue); }
+.hljs-meta { color: var(--gb-blue); }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: bold; }
+
+/* ===== TABLES ===== */
+table {
+  border-collapse: collapse;
+  margin: 0.9em 0;
+  width: 100%;
+  font-size: 0.82em;
+}
+
+th {
+  background-color: var(--gb-bg2);
+  color: var(--gb-yellow);
+  padding: 0.55em 0.8em;
+  text-align: left;
+  font-weight: bold;
+}
+
+td {
+  padding: 0.45em 0.8em;
+  border-bottom: 1px solid var(--gb-bg2);
+}
+
+tr:nth-child(even) { background-color: var(--gb-bg1); }
+
+/* ===== LINKS ===== */
+a {
+  color: var(--gb-blue);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gb-blue);
+}
+a:hover { color: var(--gb-aqua); border-bottom-color: var(--gb-aqua); }
+
+/* ===== BLOCKQUOTES ===== */
+blockquote {
+  border-left: 5px solid var(--gb-yellow);
+  background-color: var(--gb-bg1);
+  padding: 0.8em 1em;
+  margin: 1em 0;
+  font-style: italic;
+  color: var(--gb-fg);
+}
+
+/* ===== IMAGES ===== */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+  background: var(--gb-fg);
+}
+
+/* ===== HR ===== */
+hr { border: none; border-top: 2px solid var(--gb-bg2); margin: 1.3em 0; }
+
+/* ===== LEAD (title) ===== */
+section.lead {
+  background-color: var(--gb-bg0-h);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+section.lead h1 {
+  color: var(--gb-yellow);
+  border-bottom: none;
+  font-size: 2.6em;
+  margin-bottom: 0.3em;
+}
+section.lead h2 { color: var(--gb-aqua); font-weight: normal; font-size: 1.25em; }
+
+/* ===== DIVIDER ===== */
+section.divider {
+  background-color: var(--gb-bg0-h);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+section.divider h1 {
+  color: var(--gb-orange);
+  border-bottom: none;
+  font-size: 2.4em;
+}
+section.divider footer { display: none; }
+
+/* ===== FOOTER ===== */
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background-color: var(--gb-bg0-h);
+  color: var(--gb-fg4);
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  font-size: 0.42em;
+  z-index: 10;
+}
+section.lead footer, section.divider footer { display: none; }
+
+/* ===== UTILITIES ===== */
+.text-center { text-align: center !important; }
+.small { font-size: 0.8em; }
+.smaller { font-size: 0.7em; }
+.success { color: var(--gb-green) !important; }
+.warning { color: var(--gb-yellow) !important; }
+.error { color: var(--gb-red) !important; }
+.info { color: var(--gb-blue) !important; }
+.muted { color: var(--gb-gray) !important; }
+
+/* ===== COLUMNS ===== */
+.columns { display: grid; grid-template-columns: 1fr 1fr; gap: 2em; align-items: start; }
+.columns-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5em; align-items: start; }
+
+/* ===== PAGINATION OFF ===== */
+section::after { display: none !important; }

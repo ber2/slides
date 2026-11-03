@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" font-family="Inter, Helvetica, Arial, sans-serif">
+  <rect width="640" height="360" fill="#282828"/>
+  <g font-size="15" fill="#a89984">
+    <text x="16" y="62">layer 2</text>
+    <text x="16" y="172">layer 1</text>
+    <text x="16" y="282">layer 0</text>
+  </g>
+  <g stroke="#504945" stroke-width="2">
+    <line x1="150" y1="90" x2="520" y2="90"/>
+    <line x1="150" y1="200" x2="300" y2="200"/><line x1="300" y1="200" x2="420" y2="200"/><line x1="420" y1="200" x2="520" y2="200"/>
+    <line x1="150" y1="310" x2="210" y2="310"/><line x1="210" y1="310" x2="260" y2="310"/><line x1="260" y1="310" x2="300" y2="310"/><line x1="300" y1="310" x2="360" y2="310"/><line x1="360" y1="310" x2="420" y2="310"/><line x1="420" y1="310" x2="470" y2="310"/><line x1="470" y1="310" x2="520" y2="310"/><line x1="520" y1="310" x2="580" y2="310"/>
+  </g>
+  <g stroke="#504945" stroke-width="1.5" stroke-dasharray="4 4">
+    <line x1="150" y1="90" x2="150" y2="310"/><line x1="520" y1="90" x2="520" y2="310"/>
+    <line x1="300" y1="200" x2="300" y2="310"/><line x1="420" y1="200" x2="420" y2="310"/>
+  </g>
+  <g fill="#83a598">
+    <circle cx="150" cy="90" r="9"/><circle cx="520" cy="90" r="9"/>
+    <circle cx="150" cy="200" r="9"/><circle cx="300" cy="200" r="9"/><circle cx="420" cy="200" r="9"/><circle cx="520" cy="200" r="9"/>
+    <circle cx="150" cy="310" r="9"/><circle cx="210" cy="310" r="9"/><circle cx="260" cy="310" r="9"/><circle cx="300" cy="310" r="9"/><circle cx="360" cy="310" r="9"/><circle cx="420" cy="310" r="9"/><circle cx="470" cy="310" r="9"/><circle cx="520" cy="310" r="9"/><circle cx="580" cy="310" r="9"/>
+  </g>
+  <g stroke="#fe8019" stroke-width="4" fill="none" stroke-linecap="round">
+    <path d="M150 90 L520 90 L520 200 L420 200 L420 310 L470 310"/>
+  </g>
+  <circle cx="470" cy="310" r="12" fill="#fabd2f"/>
+  <text x="470" y="345" font-size="15" fill="#fabd2f" text-anchor="middle">nearest match</text>
+  <text x="150" y="122" font-size="15" fill="#fe8019" text-anchor="middle">start</text>
+</svg>
